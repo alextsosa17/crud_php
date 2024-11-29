@@ -1,6 +1,8 @@
-CREATE DATABASE crud_db;
 
-USE crud_db;
+CREATE DATABASE crud_php;
+
+USE crud_php;
+
 
 CREATE TABLE area (
     codigo_area INT(3) NOT NULL,
@@ -12,7 +14,22 @@ CREATE TABLE formulario (
     nombre VARCHAR(100),
     apellido VARCHAR(100),
     documento VARCHAR(10) UNIQUE,
-    telefono_area INT(3),
+    codigo_area INT(3),
     telefono VARCHAR(8),
-    email VARCHAR(100) UNIQUE
+    email VARCHAR(100) UNIQUE,
+    FOREIGN KEY (codigo_area) REFERENCES area(codigo_area)  
 );
+
+
+INSERT INTO area (codigo_area)
+VALUES 
+    (FLOOR(RAND() * 900) + 100),  -- Genera un número aleatorio entre 100 y 999
+    (FLOOR(RAND() * 900) + 100),  -- Genera un número aleatorio entre 100 y 999
+    (FLOOR(RAND() * 900) + 100),  -- Genera un número aleatorio entre 100 y 999
+    (FLOOR(RAND() * 900) + 100),  -- Genera un número aleatorio entre 100 y 999
+    (FLOOR(RAND() * 900) + 100),  -- Genera un número aleatorio entre 100 y 999
+    (FLOOR(RAND() * 900) + 100),  -- Genera un número aleatorio entre 100 y 999
+    (FLOOR(RAND() * 900) + 100),  -- Genera un número aleatorio entre 100 y 999
+    (FLOOR(RAND() * 900) + 100),  -- Genera un número aleatorio entre 100 y 999
+    (FLOOR(RAND() * 900) + 100),  -- Genera un número aleatorio entre 100 y 999
+    (FLOOR(RAND() * 900) + 100);  -- Genera un número aleatorio entre 100 y 99

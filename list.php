@@ -82,53 +82,63 @@ $datos = get_datos(); // Llamada a la función que obtiene los datos
 <body class="body">
     <div class="container">
         <h3>Listado de Registros</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Documento</th>
-                    <th>Código de Área</th>
-                    <th>Teléfono</th>
-                    <th>Email</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($datos as $dato): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($dato['id']); ?></td>
-                    <td><?php echo htmlspecialchars($dato['nombre']); ?></td>
-                    <td><?php echo htmlspecialchars($dato['apellido']); ?></td>
-                    <td><?php echo htmlspecialchars($dato['documento']); ?></td>
-                    <td><?php echo htmlspecialchars($dato['codigo_area']); ?></td>
-                    <td><?php echo htmlspecialchars($dato['telefono']); ?></td>
-                    <td><?php echo htmlspecialchars($dato['email']); ?></td>
-                    <td>
-                        <!-- Formulario para editar -->
-                        <form action="crud.php" method="POST" style="display:inline;">
-                            <input type="hidden" name="action" value="editar">
-                            <input type="hidden" name="id" value="<?php echo $dato['id']; ?>">
-                            <input type="hidden" name="nombre" value="<?php echo $dato['nombre']; ?>">
-                            <input type="hidden" name="apellido" value="<?php echo $dato['apellido']; ?>">
-                            <input type="hidden" name="documento" value="<?php echo $dato['documento']; ?>">
-                            <input type="hidden" name="telefono" value="<?php echo $dato['telefono']; ?>">
-                            <input type="hidden" name="email" value="<?php echo $dato['email']; ?>">
-                            <input type="hidden" name="codigo_area" value="<?php echo $dato['codigo_area']; ?>">
-                            <button type="submit" class="btn btn-edit">Editar</button>
-                        </form>
 
-                        <!-- Formulario para eliminar -->
-                        <form action="crud.php" method="POST" style="display:inline;">
-                            <input type="hidden" name="action" value="eliminar">
-                            <input type="hidden" name="id" value="<?php echo $dato['id']; ?>">
-                            <button type="submit" class="btn btn-delete">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <?php if (empty($datos)): ?>
+            <!-- Mensaje si no hay datos -->
+            <div style="background-color: #f44336; color: white; padding: 15px; border-radius: 5px; font-size: 16px; width: 60%; margin: 20px auto; text-align: center;">
+                Por favor ingrese algún dato en <strong>Crear Registro</strong>para poder visualizarlos.
+            </div>
+        <?php else: ?>
+            <!-- Tabla con datos -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Documento</th>
+                        <th>Código de Área</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($datos as $dato): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($dato['id']); ?></td>
+                        <td><?php echo htmlspecialchars($dato['nombre']); ?></td>
+                        <td><?php echo htmlspecialchars($dato['apellido']); ?></td>
+                        <td><?php echo htmlspecialchars($dato['documento']); ?></td>
+                        <td><?php echo htmlspecialchars($dato['codigo_area']); ?></td>
+                        <td><?php echo htmlspecialchars($dato['telefono']); ?></td>
+                        <td><?php echo htmlspecialchars($dato['email']); ?></td>
+                        <td>
+                            <!-- Formulario para editar -->
+                            <form action="crud.php" method="POST" style="display:inline;">
+                                <input type="hidden" name="action" value="editar">
+                                <input type="hidden" name="id" value="<?php echo $dato['id']; ?>">
+                                <input type="hidden" name="nombre" value="<?php echo $dato['nombre']; ?>">
+                                <input type="hidden" name="apellido" value="<?php echo $dato['apellido']; ?>">
+                                <input type="hidden" name="documento" value="<?php echo $dato['documento']; ?>">
+                                <input type="hidden" name="telefono" value="<?php echo $dato['telefono']; ?>">
+                                <input type="hidden" name="email" value="<?php echo $dato['email']; ?>">
+                                <input type="hidden" name="codigo_area" value="<?php echo $dato['codigo_area']; ?>">
+                                <button type="submit" class="btn btn-edit">Editar</button>
+                            </form>
+
+                            <!-- Formulario para eliminar -->
+                            <form action="crud.php" method="POST" style="display:inline;">
+                                <input type="hidden" name="action" value="eliminar">
+                                <input type="hidden" name="id" value="<?php echo $dato['id']; ?>">
+                                <button type="submit" class="btn btn-delete">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php endif; ?>
     </div>
 </body>
+

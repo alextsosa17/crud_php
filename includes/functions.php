@@ -20,6 +20,72 @@ function obtener_campos() {
     return $campos;
 }
 
+function validar_email($email, $id = null) {
+    global $conn;
+
+    $sql = "SELECT COUNT(*) FROM formulario WHERE email = ?";
+    if ($id) {
+        $sql .= " AND id != ?";
+    }
+
+    $stmt = $conn->prepare($sql);
+    if ($id) {
+        $stmt->bind_param("si", $email, $id);
+    } else {
+        $stmt->bind_param("s", $email);
+    }
+    $stmt->execute();
+    $stmt->bind_result($email_count);
+    $stmt->fetch();
+    $stmt->close();
+
+    return $email_count == 0;
+}
+
+function validar_documento($documento, $id = null) {
+    global $conn;
+
+    $sql = "SELECT COUNT(*) FROM formulario WHERE documento = ?";
+    if ($id) {
+        $sql .= " AND id != ?";
+    }
+
+    $stmt = $conn->prepare($sql);
+    if ($id) {
+        $stmt->bind_param("si", $documento, $id);
+    } else {
+        $stmt->bind_param("s", $documento);
+    }
+    $stmt->execute();
+    $stmt->bind_result($documento_count);
+    $stmt->fetch();
+    $stmt->close();
+
+    return $documento_count == 0;
+}
+
+function validar_telefono($telefono, $id = null) {
+    global $conn;
+
+    $sql = "SELECT COUNT(*) FROM formulario WHERE telefono = ?";
+    if ($id) {
+        $sql .= " AND id != ?";
+    }
+
+    $stmt = $conn->prepare($sql);
+    if ($id) {
+        $stmt->bind_param("si", $telefono, $id);
+    } else {
+        $stmt->bind_param("s", $telefono);
+    }
+    $stmt->execute();
+    $stmt->bind_result($telefono_count);
+    $stmt->fetch();
+    $stmt->close();
+
+    return $telefono_count == 0;
+}
+
 function validar_codigo_area($codigo_area) {
     global $conn;
 
@@ -73,23 +139,8 @@ function guardar_datos($nombre, $apellido, $documento, $codigo_area, $telefono, 
     global $conn;
     session_start();
 
-    $sql_check_email = "SELECT COUNT(*) FROM formulario WHERE email = ?";
-    $stmt = $conn->prepare($sql_check_email);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->bind_result($email_count);
-    $stmt->fetch();
-    $stmt->close();
-
-    $sql_check_documento = "SELECT COUNT(*) FROM formulario WHERE documento = ?";
-    $stmt = $conn->prepare($sql_check_documento);
-    $stmt->bind_param("s", $documento);
-    $stmt->execute();
-    $stmt->bind_result($documento_count);
-    $stmt->fetch();
-    $stmt->close();
-
-    if ($email_count > 0) {
+    // Validaciones
+    if (!validar_email($email)) {
         $_SESSION['flash_message'] = [
             'type' => 'error',
             'message' => 'El email ya está registrado.'
@@ -98,10 +149,19 @@ function guardar_datos($nombre, $apellido, $documento, $codigo_area, $telefono, 
         exit;
     }
 
-    if ($documento_count > 0) {
+    if (!validar_documento($documento)) {
         $_SESSION['flash_message'] = [
             'type' => 'error',
             'message' => 'El documento ya está registrado.'
+        ];
+        header('Location: create.php');
+        exit;
+    }
+
+    if (!validar_telefono($telefono)) {
+        $_SESSION['flash_message'] = [
+            'type' => 'error',
+            'message' => 'El teléfono ya está registrado.'
         ];
         header('Location: create.php');
         exit;
@@ -130,23 +190,8 @@ function actualizar_datos($id, $nombre, $apellido, $documento, $codigo_area, $te
     global $conn;
     session_start();
 
-    $sql_check_email = "SELECT COUNT(*) FROM formulario WHERE email = ? AND id != ?";
-    $stmt = $conn->prepare($sql_check_email);
-    $stmt->bind_param("si", $email, $id);
-    $stmt->execute();
-    $stmt->bind_result($email_count);
-    $stmt->fetch();
-    $stmt->close();
-
-    $sql_check_documento = "SELECT COUNT(*) FROM formulario WHERE documento = ? AND id != ?";
-    $stmt = $conn->prepare($sql_check_documento);
-    $stmt->bind_param("si", $documento, $id);
-    $stmt->execute();
-    $stmt->bind_result($documento_count);
-    $stmt->fetch();
-    $stmt->close();
-
-    if ($email_count > 0) {
+    // Validaciones
+    if (!validar_email($email, $id)) {
         $_SESSION['flash_message'] = [
             'type' => 'error',
             'message' => 'El email ya está registrado.'
@@ -155,10 +200,19 @@ function actualizar_datos($id, $nombre, $apellido, $documento, $codigo_area, $te
         exit;
     }
 
-    if ($documento_count > 0) {
+    if (!validar_documento($documento, $id)) {
         $_SESSION['flash_message'] = [
             'type' => 'error',
             'message' => 'El documento ya está registrado.'
+        ];
+        header('Location: list.php');
+        exit;
+    }
+
+    if (!validar_telefono($telefono, $id)) {
+        $_SESSION['flash_message'] = [
+            'type' => 'error',
+            'message' => 'El teléfono ya está registrado.'
         ];
         header('Location: list.php');
         exit;
